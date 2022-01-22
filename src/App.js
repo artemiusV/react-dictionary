@@ -6,14 +6,14 @@ import Header from './components/Header/Header';
 
 function App() {
 
-  //const [word, setWord] = useState("");
+  const [word, setWord] = useState("");
   const [meanings, setMeanings] = useState([])
 
 
   const dictionaryApi = async () => {
     try {
       const data = await axios.get(
-        'https://api.dictionaryapi.dev/api/v2/entries/en/hello'
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
       );
 
       setMeanings(data.data)
@@ -28,7 +28,7 @@ function App() {
 
   useEffect(() => {
     dictionaryApi()
-  }, [])
+  }, [word])
 
   return (
     <div className="App"
@@ -36,7 +36,10 @@ function App() {
       <Container
         maxWidth='md'
         stye={{ display: "flex", flexDirection: 'column', height: '100vh' }}>
-        <Header />
+        <Header
+          word={word}
+          setWord={setWord}
+        />
       </Container>
     </div >
   );
