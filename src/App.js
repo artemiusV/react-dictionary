@@ -3,14 +3,34 @@ import './App.css';
 import { useEffect, useState } from 'react'
 import { Container } from '@mui/material';
 import Header from './components/Header/Header';
+import Definitions from './components/Definitions/Definitions';
+import { useDebounce } from './hooks';
 
 function App() {
 
   const [word, setWord] = useState("");
   const [meanings, setMeanings] = useState([])
 
+  const debouncedSearchTerm = useDebounce(word, 500);
+  // Effect for API call
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        dictionaryApi(debouncedSearchTerm)
+        /*  setIsSearching(true);
+         searchCharacters(debouncedSearchTerm).then((results) => {
+           setIsSearching(false);
+           setResults(results);
+         }); */
+      } else {/* 
+        setResults([]);
+        setIsSearching(false); */
+      }
+    },
+    [debouncedSearchTerm] // Only call effect if debounced search term changes
+  );
 
-  const dictionaryApi = async () => {
+  const dictionaryApi = async (word) => {
     try {
       const data = await axios.get(
         `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
@@ -26,9 +46,11 @@ function App() {
   console.log(meanings);
 
 
-  useEffect(() => {
-    dictionaryApi()
-  }, [word])
+  /*   useEffect(() => {
+      if (word) {
+        dictionaryApi()
+      }
+    }, [word]) */
 
   return (
     <div className="App"
@@ -40,6 +62,10 @@ function App() {
           word={word}
           setWord={setWord}
         />
+        {meanings && (
+          <Definitions word={word} meanings={meanings} />
+        )}
+
       </Container>
     </div >
   );

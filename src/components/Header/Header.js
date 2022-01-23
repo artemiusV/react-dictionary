@@ -15,8 +15,8 @@ const Header = ({ word, setWord }) => {
     });
 
     return (
-        <div className='header'>lllll
-            <span className='title'>{word ? word : 'Trans-lator'}</span>
+        <div className='header'>
+            <span className='title'>{word ? word : 'Translator'}</span>
             <div className='inputs'>
                 <ThemeProvider theme={darkTheme}>
                     <TextField
